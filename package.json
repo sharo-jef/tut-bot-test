@@ -4,14 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r esm ."
+    "start": "node --experimental-modules ./index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@line/bot-sdk": "^7.1.0",
-    "esm": "^3.2.25",
     "express": "^4.17.1"
   },
   "type": "module",
