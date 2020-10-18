@@ -28,6 +28,6 @@ app.get('/debug', (req, res) => {
 async function main(req, res) {
     res.status(200).end();
     console.log(req.body);
-    const response = axios.post(BACKEND_SERVER_URI_BASE, req.body);
+    const response = await axios.post(BACKEND_SERVER_URI_BASE, req.body);
     console.log(response);
 }
