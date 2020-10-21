@@ -1,4 +1,5 @@
 import axios from 'axios'
+import bodyParser from 'body-parser'
 import express from 'express'
 import line from '@line/bot-sdk'
 
@@ -11,6 +12,11 @@ const client = new line.Client(config);
 
 const app = express();
 const listener = app.listen(process.env.PORT || 80, () => console.log(`listen on ${listener.address().port}`));
+
+app.use(bodyParser.urlencoded({
+    extended: true,
+}));
+app.use(bodyParser.json());
 
 app.get('/', (_, res) => res.send('OK'));
 app.post('/hook', line.middleware(config), main);
