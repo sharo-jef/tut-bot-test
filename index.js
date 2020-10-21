@@ -15,7 +15,7 @@ const listener = app.listen(process.env.PORT || 80, () => console.log(`listen on
 app.get('/', (_, res) => res.send('OK'));
 app.post('/hook', line.middleware(config), main);
 app.post('/push', async (req ,res) => {
-    res.status(200).end();
+    res.send(req.body);
     const response = JSON.parse(req.body);
     const result = await client.pushMessage(response.to, response.messages);
     console.log(result);
