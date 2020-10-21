@@ -16,7 +16,7 @@ const listener = app.listen(process.env.PORT || 80, () => console.log(`listen on
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-app.use(bodyParser.json());
+app.use(bodyParser.text());
 
 app.get('/', (_, res) => res.send('OK'));
 app.post('/hook', line.middleware(config), main);
@@ -40,6 +40,6 @@ app.get('/debug', (req, res) => {
 async function main(req, res) {
     res.status(200).end();
     console.log(req.body);
-    const response = await axios.post(BACKEND_SERVER_URI_BASE, JSON.stringify(req.body));
+    const response = await axios.post(BACKEND_SERVER_URI_BASE, req.body);
     console.log(response.data);
 }
