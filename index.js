@@ -29,13 +29,78 @@ const listener = app.listen(process.env.PORT || 80, async () => {
                 bounds: {
                     x: 0,
                     y: 0,
-                    width: 2500,
-                    height: 843,
+                    width: 833,
+                    height: 412,
                 },
                 action: {
                     type: 'message',
-                    label: 'test',
-                    text: 'テスト',
+                    label: 'question',
+                    text: '質問',
+                },
+            },
+            {
+                bounds: {
+                    x: 833,
+                    y: 0,
+                    width: 833,
+                    height: 412,
+                },
+                action: {
+                    type: 'message',
+                    label: 'important',
+                    text: '重要情報',
+                },
+            },
+            {
+                bounds: {
+                    x: 1666,
+                    y: 0,
+                    width: 833,
+                    height: 412,
+                },
+                action: {
+                    type: 'message',
+                    label: 'news',
+                    text: '新着情報',
+                },
+            },
+            {
+                bounds: {
+                    x: 0,
+                    y: 412,
+                    width: 833,
+                    height: 412,
+                },
+                action: {
+                    type: 'message',
+                    label: 'canceled',
+                    text: '休講案内',
+                },
+            },
+            {
+                bounds: {
+                    x: 833,
+                    y: 412,
+                    width: 833,
+                    height: 412,
+                },
+                action: {
+                    type: 'message',
+                    label: 'events',
+                    text: 'イベント',
+                },
+            },
+            {
+                bounds: {
+                    x: 1666,
+                    y: 412,
+                    width: 833,
+                    height: 412,
+                },
+                action: {
+                    type: 'message',
+                    label: 'settings',
+                    text: '設定',
                 },
             },
         ],
