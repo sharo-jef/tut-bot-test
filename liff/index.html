@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>設定</title>
+    </head>
+    <body>
+        <main>
+            <h1>TEST</h1>
+        </main>
+        <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+        <script>
+            const idPlaceholder = document.getElementById('id-placeholder');
+            const errorPlaceholder = document.getElementById('error-placeholder');
+
+            liff.init(data => {
+                const userId = data.context.userId;
+                idPlaceholder.innerText = userId;
+            }, err => {
+                console.error(err);
+            });
+        </script>
+    </body>
+</html>

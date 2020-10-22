@@ -127,6 +127,10 @@ app.post('/push', async (req ,res) => {
     console.log(result);
 });
 
+app.get('/liff', (req ,res) => {
+    res.sendFile('./liff/index.html');
+});
+
 // DEBUG
 app.get('/debug', (req, res) => {
     res.send(req.body);
