@@ -131,7 +131,7 @@ app.post('/push', async (req ,res) => {
 });
 
 app.get('/liff', (req ,res) => {
-    res.sendFile('./liff/index.html');
+    res.sendFile('/app/liff/index.html');
 });
 
 // DEBUG
