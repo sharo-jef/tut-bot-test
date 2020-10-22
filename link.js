@@ -6,4 +6,4 @@ const config = {
 };
 const client = new line.Client(config);
 
-client.linkRichMenuToUser('');
+client.linkRichMenuToUser('Uc10f34878ecea7828bf09317816b662e', 'richmenu-1b12fb4f0cee5bd06fc11aab5dc3b2f1');

@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import axios from 'axios'
 import bodyParser from 'body-parser'
 import express from 'express'
@@ -40,6 +42,8 @@ const listener = app.listen(process.env.PORT || 80, async () => {
     });
 
     console.log(richMenu);
+
+    await client.setRichMenuImage(richMenu, fs.createReadStream('./img/menu1.png'), 'image/png');
 
     await client.setDefaultRichMenu(richMenu).catch(console.error);
 });
