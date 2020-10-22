@@ -17,6 +17,7 @@
                 const userId = data.context.userId;
                 idPlaceholder.innerText = userId;
             }, err => {
+                idPlaceholder.innerText = err;
                 console.error(err);
             });
         </script>
