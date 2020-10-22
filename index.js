@@ -41,6 +41,8 @@ const listener = app.listen(process.env.PORT || 80, async () => {
 
     console.log(richMenu);
 
+    console.log(await client.getDefaultRichMenuId());
+
     await client.setDefaultRichMenu(richMenu).catch(console.error);
 });
 
