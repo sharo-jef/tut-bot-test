@@ -98,9 +98,12 @@ const listener = app.listen(process.env.PORT || 80, async () => {
                     height: 412,
                 },
                 action: {
-                    type: 'message',
+                    type: 'uri',
                     label: 'settings',
-                    text: '設定',
+                    uri: 'https://tut-line-bot-test.glitch.me/liff',
+                    altUri: {
+                        desktop: 'https://tut-line-bot-test.glitch.me/liff',
+                    },
                 },
             },
         ],
