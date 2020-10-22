@@ -11,7 +11,36 @@ const config = {
 const client = new line.Client(config);
 
 const app = express();
-const listener = app.listen(process.env.PORT || 80, () => console.log(`listen on ${listener.address().port}`));
+const listener = app.listen(process.env.PORT || 80, async () => {
+    console.log(`listen on ${listener.address().port}`);
+
+    const richMenu = await client.createRichMenu({
+        size: {
+            width: 2500,
+            height: 843,
+        },
+        selected: true,
+        name: 'Menu',
+        chatBarText: 'メニュー',
+        areas: [
+            {
+                bounds: {
+                    x: 0,
+                    y: 0,
+                    width: 2500,
+                    height: 843,
+                },
+                action: {
+                    type: 'message',
+                    label: 'test',
+                    text: 'テスト',
+                },
+            },
+        ],
+    });
+
+    client.setDefaultRichMenu(richMenu);
+});
 
 app.use(bodyParser.urlencoded({
     extended: true,
