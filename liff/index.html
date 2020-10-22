@@ -3,25 +3,61 @@
     <head>
         <meta charset="utf-8" />
         <title>設定</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     </head>
     <body>
+        <header>
+            <ul class="nav nav-tabs">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h1>設定</h1>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </header>
         <main>
-            <h1>TEST</h1>
-            <p id="id-placeholder"></p>
-            <p id="error-placeholder"></p>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h4>学生情報</h4>
+                        <form>
+                            <label>学部</label>
+                            <select class="custom-select">
+                                <option value="BS">BS</option>
+                                <option value="CS">CS</option>
+                                <option value="MS">MS</option>
+                                <option value="ES">ES</option>
+                                <option value="院八">院八</option>
+                                <option value="HS">HS</option>
+                                <option value="DS">DS</option>
+                                <option value="院DS">院DS</option>
+                            </select>
+                            <label>学年</label>
+                            <select class="custom-select">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </form>
+                        <hr />
+                        <h4>プッシュ通知設定</h4>
+                        <form>
+                            <label>新着情報</label>
+                            <input type="checkbox" checked />
+                            <label>休講案内</label>
+                            <input type="checkbox" checked />
+                            <label>イベント</label>
+                            <input type="checkbox" checked />
+                        </form>
+                    </div>
+                </div>
+            </div>
         </main>
-        <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
-        <script>
-            const idPlaceholder = document.getElementById('id-placeholder');
-            const errorPlaceholder = document.getElementById('error-placeholder');
-
-            liff.init(data => {
-                const userId = data.context.userId;
-                idPlaceholder.innerText = userId;
-            }, err => {
-                errorPlaceholder.innerText = err;
-                console.error(err);
-            });
-        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
