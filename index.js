@@ -41,8 +41,6 @@ const listener = app.listen(process.env.PORT || 80, async () => {
 
     console.log(richMenu);
 
-    console.log(await client.getDefaultRichMenuId());
-
     await client.setDefaultRichMenu(richMenu).catch(console.error);
 });
 
@@ -75,6 +73,4 @@ async function main(req, res) {
     console.log(req.body);
     const response = await axios.post(BACKEND_SERVER_URI_BASE, req.body);
     console.log(response.data);
-    const test = await axios.get('https://www.google.com/');
-    console.log(test.data);
 }
