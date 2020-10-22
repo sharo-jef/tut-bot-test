@@ -39,6 +39,8 @@ const listener = app.listen(process.env.PORT || 80, async () => {
         ],
     });
 
+    console.log(richMenu);
+
     client.setDefaultRichMenu(richMenu);
 });
 
