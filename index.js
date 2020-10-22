@@ -70,7 +70,7 @@ app.get('/debug', (req, res) => {
  */
 async function main(req, res) {
     res.status(200).end();
-    console.log(typeof req.body);
+    console.log(JSON.stringify(req.body, 0, 4));
     const response = await axios.post(BACKEND_SERVER_URI_BASE, req.body);
     console.log(response.data);
 }
