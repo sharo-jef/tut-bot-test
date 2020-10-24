@@ -4,6 +4,7 @@ import axios from 'axios'
 import bodyParser from 'body-parser'
 import express from 'express'
 import line from '@line/bot-sdk'
+import { resolve } from 'path'
 
 const BACKEND_SERVER_URI_BASE = 'https://bot-php-api.herokuapp.com/api.php';
 const config = {
@@ -149,4 +150,5 @@ async function main(req, res) {
     console.log(JSON.stringify(req.body, 0, 4));
     const response = await axios.post(BACKEND_SERVER_URI_BASE, req.body);
     console.log(response.data);
+    client.pushMessage(response.data.to, response.data.messages);
 }
