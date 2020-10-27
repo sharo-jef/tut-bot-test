@@ -101,9 +101,9 @@ const listener = app.listen(process.env.PORT || 80, async () => {
                 action: {
                     type: 'uri',
                     label: 'settings',
-                    uri: 'https://tut-line-bot-test.glitch.me/liff',
+                    uri: 'https://tut-line-bot-test.glitch.me/settings',
                     altUri: {
-                        desktop: 'https://tut-line-bot-test.glitch.me/liff',
+                        desktop: 'https://tut-line-bot-test.glitch.me/settings',
                     },
                 },
             },
@@ -131,8 +131,8 @@ app.post('/push', async (req ,res) => {
     console.log(result);
 });
 
-app.get('/liff', (req ,res) => {
-    res.sendFile('/app/liff/index.html');
+app.get('/settings', (req ,res) => {
+    res.sendFile('/app/settings/index.html');
 });
 
 // DEBUG
