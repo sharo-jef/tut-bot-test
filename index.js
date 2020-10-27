@@ -101,9 +101,9 @@ const listener = app.listen(process.env.PORT || 80, async () => {
                 action: {
                     type: 'uri',
                     label: 'settings',
-                    uri: 'https://tut-line-bot-test.glitch.me/settings',
+                    uri: 'https://liff.line.me/1655168464-glkMVdNy',
                     altUri: {
-                        desktop: 'https://tut-line-bot-test.glitch.me/settings',
+                        desktop: 'https://liff.line.me/1655168464-glkMVdNy',
                     },
                 },
             },
