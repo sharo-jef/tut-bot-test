@@ -60,7 +60,7 @@ import richmenu from './richmenu.js';
         });
         this.client.createRichMenu(richmenu)
             .then(async menuId => {
-                this.logger.debug('generated ruchmenu:', menuId);
+                this.logger.debug('generated richmenu:', menuId);
                 await this.client.setRichMenuImage(menuId, fs.createReadStream(`${process.env.ROOT}/img/menu1.png`))
                     .catch(error => this.logger.error(error));
                 await this.client.setDefaultRichMenu(menuId)
