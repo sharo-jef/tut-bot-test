@@ -20,7 +20,7 @@
  *
  * @typedef {TextMessage|MultipleMessage} Message message
  *
- * @typedef {{to:string,messages:Message[]}} MessageObject message with id of the target recipient
+ * @typedef {{to:string|string[],messages:Message[]}} MessageObject message with id of the target recipient
  *
  * @typedef {string} EventType event type
  */

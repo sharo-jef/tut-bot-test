@@ -5,7 +5,6 @@ import axios from 'axios';
 import line from '@line/bot-sdk';
 import log4js from 'log4js';
 
-import _ from './env.js';
 import express from 'express';
 import IClient from './iclient.js';
 import richmenu from './richmenu.js';
@@ -29,14 +28,14 @@ import richmenu from './richmenu.js';
         this.logger = log4js.getLogger('Line');
         this.logger.level = process.env.LOG_LEVEL;
         this.app = express();
-        const listener = this.app.listen(process.env.PORT, () => `listening on port ${listener.address().port}`);
+        const listener = this.app.listen(process.env.PORT, () => this.logger.info(`listening on port ${listener.address().port}`));
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.text());
         this.app.get('/', (_, res) => res.send('OK'));
         this.app.post('/hook', line.middleware(config), async (req, res) => {
             res.status(200).end();
             this.logger.debug(JSON.stringify(req.body, null, 4));
-            const response = await axios.post(process.env.BACKEND_SERVER_URI_BASE, req.body).catch(this.logger.error);
+            const response = await axios.post(process.env.BACKEND_SERVER_URI_BASE, req.body).catch(error => this.logger.error(error));
             if (!response) {
                 throw new Error(`response is ${typeof response}`);
             }
@@ -61,12 +60,13 @@ import richmenu from './richmenu.js';
         });
         this.client.createRichMenu(richmenu)
             .then(async menuId => {
+                this.logger.debug('generated ruchmenu:', menuId);
                 await this.client.setRichMenuImage(menuId, fs.createReadStream(`${process.env.ROOT}/img/menu1.png`))
-                    .catch(this.logger.error);
+                    .catch(error => this.logger.error(error));
                 await this.client.setDefaultRichMenu(menuId)
-                    .catch(this.logger.error);
+                    .catch(error => this.logger.error(error));
             })
-            .catch(this.logger.error);
+            .catch(error => this.logger.error(error));
     }
 
     /**
@@ -77,9 +77,9 @@ import richmenu from './richmenu.js';
     send(to, messages) {
         const lineMessages = messages.map(this._convertMessage);
         if (typeof to === 'string') {
-            this.client.pushMessage(to, lineMessages).catch(this.logger.error);
+            this.client.pushMessage(to, lineMessages).catch(error => this.logger.error(error));
         } else if (Array.isArray(to)) {
-            this.client.multicast(to, lineMessages).catch(this.logger.error);
+            this.client.multicast(to, lineMessages).catch(error => this.logger.error(error));
         } else {
             throw new TypeError('to is not a string or string[]');
         }
