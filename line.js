@@ -40,6 +40,7 @@ import richmenu from './richmenu.js';
                 throw new Error(`response is ${typeof response}`);
             }
             this.logger.debug(response.data);
+            this.send(response.data.to, response.data.messages);
         });
         this.app.post('/push', async (req, res) => {
             res.send(req.body);

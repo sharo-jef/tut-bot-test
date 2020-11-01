@@ -7,8 +7,8 @@
     "start": "node --experimental-modules -r dotenv/config ./index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "sharo_jef",
+  "license": "MIT",
   "dependencies": {
     "@line/bot-sdk": "^7.1.0",
     "axios": "^0.20.0",
