@@ -120,6 +120,16 @@ import richmenu from './richmenu.js';
                             label: content.label,
                             uri: content.uri,
                         },
+                        actions: [
+                            {
+                                type: 'uri',
+                                label: content.label,
+                                uri: content.uri,
+                                altUri: {
+                                    desktop: content.uri,
+                                },
+                            },
+                        ],
                     })),
                 },
             };
