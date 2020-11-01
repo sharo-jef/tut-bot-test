@@ -76,12 +76,20 @@ import richmenu from './richmenu.js';
      */
     send(to, messages) {
         const lineMessages = messages.map(this._convertMessage);
-        if (typeof to === 'string') {
-            this.client.pushMessage(to, lineMessages).catch(error => this.logger.error(error));
-        } else if (Array.isArray(to)) {
-            this.client.multicast(to, lineMessages).catch(error => this.logger.error(error));
-        } else {
-            throw new TypeError('to is not a string or string[]');
+        const MAX_MESSAGES = 5;
+
+        for (let i = 0; ; i += MAX_MESSAGES) {
+            const tempMessages = lineMessages.slice(i, i + MAX_MESSAGES);
+            if (!tempMessages.length) {
+                break;
+            }
+            if (typeof to === 'string') {
+                this.client.pushMessage(to, tempMessages).catch(error => this.logger.error(error));
+            } else if (Array.isArray(to)) {
+                this.client.multicast(to, tempMessages).catch(error => this.logger.error(error));
+            } else {
+                throw new TypeError('to is not a string or string[]');
+            }
         }
     }
 

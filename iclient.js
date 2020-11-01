@@ -16,11 +16,11 @@
  * @typedef {Object} MultipleMessage multiple message
  * @property {'multiple'} type type
  * @property {?string} altText alternative text
- * @property {!Content[]} contents contents
+ * @property {!Content[]} contents contents (Max: 5)
  *
  * @typedef {TextMessage|MultipleMessage} Message message
  *
- * @typedef {{to:string|string[],messages:Message[]}} MessageObject message with id of the target recipient
+ * @typedef {{to:string|string[],messages:Message[]}} MessageObject message with id of the target recipient (Max: 500)
  *
  * @typedef {string} EventType event type
  */
