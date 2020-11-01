@@ -85,10 +85,6 @@ import richmenu from './richmenu.js';
                 const MAX_COLUMNS = 10;
                 for (let i = 0; i < message.template.columns.length; i += MAX_COLUMNS) {
                     const tempMessage = JSON.parse(JSON.stringify(message));
-                    if (tempMessage.template.type !== 'carousel') {
-                        lineMessages.push(message);
-                        break;
-                    }
                     tempMessage.template.columns = tempMessage.template.columns.slice(i, i + MAX_COLUMNS);
                     lineMessages.push(tempMessage);
                 }
