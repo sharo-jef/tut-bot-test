@@ -101,7 +101,10 @@ import richmenu from './richmenu.js';
             if (typeof to === 'string') {
                 this.client.pushMessage(to, tempMessages).catch(error => this.logger.error(error));
             } else if (Array.isArray(to)) {
-                this.client.multicast(to, tempMessages).catch(error => this.logger.error(error));
+                const MAX_RECIPIENTS = 500;
+                for (let i = 0; i < to.length; i += MAX_RECIPIENTS) {
+                    this.client.multicast(to.slice(i, i + MAX_RECIPIENTS), tempMessages).catch(error => this.logger.error(error));
+                }
             } else {
                 throw new TypeError('to is not a string or string[]');
             }
