@@ -82,7 +82,7 @@ import richmenu from './richmenu.js';
             if (message.type === 'text') {
                 lineMessages.push(message);
             } else if (message.type === 'template' && message.template.type === 'carousel') {
-                const MAX_COLUMNS = 5;
+                const MAX_COLUMNS = 10;
                 for (let i = 0; i < message.template.columns.length; i += MAX_COLUMNS) {
                     const tempMessage = JSON.parse(JSON.stringify(message));
                     if (tempMessage.template.type !== 'carousel') {
