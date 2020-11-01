@@ -76,14 +76,29 @@ import richmenu from './richmenu.js';
      * @param {import('./iclient.js').Message[]} messages messages
      */
     send(to, messages) {
-        const lineMessages = messages.map(this._convertMessage);
-        const MAX_MESSAGES = 5;
-
-        for (let i = 0; ; i += MAX_MESSAGES) {
-            const tempMessages = lineMessages.slice(i, i + MAX_MESSAGES);
-            if (!tempMessages.length) {
-                break;
+        const lineMessages = [];
+        messages.map(this._convertMessage).forEach(message => {
+            if (message.type === 'text') {
+                lineMessages.push(message);
+            } else if (message.type === 'template' && message.template.type === 'carousel') {
+                const MAX_COLUMNS = 5;
+                for (let i = 0; i < message.template.columns.length; i += MAX_COLUMNS) {
+                    /** @type {import('@line/bot-sdk').TemplateMessage} */
+                    const tempMessage = Object.assign({}, message);
+                    if (tempMessage.template.type !== 'carousel') {
+                        lineMessages.push(message);
+                        break;
+                    }
+                    tempMessage.template.columns = message.template.columns.slice(i, i + MAX_COLUMNS);
+                    lineMessages.push(tempMessage);
+                }
             }
+        });
+
+
+        const MAX_MESSAGES = 5;
+        for (let i = 0; i < lineMessages.length; i += MAX_MESSAGES) {
+            const tempMessages = lineMessages.slice(i, i + MAX_MESSAGES);
             if (typeof to === 'string') {
                 this.client.pushMessage(to, tempMessages).catch(error => this.logger.error(error));
             } else if (Array.isArray(to)) {
