@@ -76,6 +76,7 @@ import richmenu from './richmenu.js';
      * @param {import('./iclient.js').Message[]} messages messages
      */
     send(to, messages) {
+        /** @type {import('@line/bot-sdk').Message[]} */
         const lineMessages = [];
         messages.map(this._convertMessage).forEach(message => {
             if (message.type === 'text') {
@@ -83,18 +84,16 @@ import richmenu from './richmenu.js';
             } else if (message.type === 'template' && message.template.type === 'carousel') {
                 const MAX_COLUMNS = 5;
                 for (let i = 0; i < message.template.columns.length; i += MAX_COLUMNS) {
-                    /** @type {import('@line/bot-sdk').TemplateMessage} */
-                    const tempMessage = Object.assign({}, message);
+                    const tempMessage = JSON.parse(JSON.stringify(message));
                     if (tempMessage.template.type !== 'carousel') {
                         lineMessages.push(message);
                         break;
                     }
-                    tempMessage.template.columns = message.template.columns.slice(i, i + MAX_COLUMNS);
+                    tempMessage.template.columns = tempMessage.template.columns.slice(i, i + MAX_COLUMNS);
                     lineMessages.push(tempMessage);
                 }
             }
         });
-
 
         const MAX_MESSAGES = 5;
         for (let i = 0; i < lineMessages.length; i += MAX_MESSAGES) {
