@@ -17,7 +17,7 @@
  * @typedef {Object} MultipleMessage multiple message
  * @property {!string[]} to id of the target recipient
  * @property {'multiple'} type type
- * @property {?string} altText alternative text
+ * @property {!string} altText alternative text
  * @property {!Content[]} contents contents
  *
  * @typedef {TextMessage|MultipleMessage} Message message
@@ -34,7 +34,7 @@ export default class IClient {
      * @virtual
      * @param {Message[]} messages messages
      */
-    send(to, messages) {
+    async send(to, messages) {
 
     }
 

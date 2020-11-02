@@ -1,11 +1,10 @@
 // @ts-check
 import fs from 'fs';
 
-import axios from 'axios';
+import express from 'express';
 import line from '@line/bot-sdk';
 import log4js from 'log4js';
 
-import express from 'express';
 import IClient from './iclient.js';
 import richmenu from './richmenu.js';
 
@@ -20,31 +19,31 @@ import richmenu from './richmenu.js';
     client = null;
     /**
      * constructor of line client
+     * @param {string} port port
      * @param {line.MiddlewareConfig&line.ClientConfig} config config
      */
-    constructor(config) {
+    constructor(port, config) {
         super();
+        /** @type {{type:string,listener:function}[]} */
+        this.listeners = [];
         this.client = new line.Client(config);
         this.logger = log4js.getLogger('Line');
         this.logger.level = process.env.LOG_LEVEL;
         this.app = express();
-        const listener = this.app.listen(process.env.PORT, () => this.logger.info(`listening on port ${listener.address().port}`));
+        const listener = this.app.listen(port, () => this.logger.info(`listening on port ${listener.address().port}`));
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.text());
         this.app.get('/', (_, res) => res.send('OK'));
         this.app.post('/hook', line.middleware(config), async (req, res) => {
             res.status(200).end();
-            this.logger.debug(JSON.stringify(req.body, null, 4));
-            const response = await axios.post(process.env.BACKEND_SERVER_URI_BASE, req.body).catch(error => this.logger.error(error));
-            if (!response) {
-                throw new Error(`response is ${typeof response}`);
+            const message = req.body.events.map(this._convertToGeneral);
+            const listeners = this.listeners.filter(listener => listener.type === 'message');
+            for (const listener of listeners) {
+                await listener.listener(message);
             }
-            this.logger.debug(response.data);
-            this.send(response.data.messages);
         });
         this.app.post('/push', async (req, res) => {
             res.send(req.body);
-            this.logger.debug('req:', req.body);
             /**
              * @type {{messages:import('./iclient.js').Message[]}}
              */
@@ -71,46 +70,41 @@ import richmenu from './richmenu.js';
     }
 
     /**
+     * method to add event listener
+     * @param {'message'} event event type
+     * @param {function} listener listener function
+     */
+    on(event, listener) {
+        this.listeners.push({type: event, listener});
+    }
+
+    /**
      * @override
      * @param {import('./iclient.js').Message[]} messages messages
      */
-    send(messages) {
+    async send(messages) {
         /** @type {{to:string[],message:import('@line/bot-sdk').Message}[]} */
         const lineMessages = [];
-        messages.map(this._convertMessage).forEach(message => {
+        messages.map(this._convertToLine).forEach(message => {
             if (message.message.type === 'text') {
                 lineMessages.push(message);
             } else if (message.message.type === 'template' && message.message.template.type === 'carousel') {
                 const MAX_COLUMNS = 10;
                 for (let i = 0; i < message.message.template.columns.length; i += MAX_COLUMNS) {
                     const tempMessage = JSON.parse(JSON.stringify(message));
-                    tempMessage.template.columns = tempMessage.template.columns.slice(i, i + MAX_COLUMNS);
+                    tempMessage.message.template.columns = tempMessage.message.template.columns.slice(i, i + MAX_COLUMNS);
                     lineMessages.push(tempMessage);
                 }
             }
         });
 
-        lineMessages.forEach(message => {
+        for (const message of lineMessages) {
             const MAX_RECIPIENTS = 500;
             for (let i = 0; i < message.to.length; i += MAX_RECIPIENTS) {
-                this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)
+                await this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)
                     .catch(error => this.logger.fatal(error));
             }
-        });
-
-        // const MAX_MESSAGES = 5;
-        // for (let i = 0; i < lineMessages.length; i += MAX_MESSAGES) {
-        //     const tempMessages = lineMessages.slice(i, i + MAX_MESSAGES);
-        //     for (let j = 0; j < )
-        //     if (Array.isArray(to)) {
-        //         const MAX_RECIPIENTS = 500;
-        //         for (let i = 0; i < to.length; i += MAX_RECIPIENTS) {
-        //             this.client.multicast(to.slice(i, i + MAX_RECIPIENTS), tempMessages).catch(error => this.logger.error(error));
-        //         }
-        //     } else {
-        //         throw new TypeError('to is not a string or string[]');
-        //     }
-        // }
+        }
     }
 
     /**
@@ -118,7 +112,7 @@ import richmenu from './richmenu.js';
      * @param {import('./iclient.js').Message} message general message object
      * @return {{to:string[],message:line.Message}}
      */
-    _convertMessage(message) {
+    _convertToLine(message) {
         switch (message.type) {
         case 'text':
             return {
@@ -159,5 +153,24 @@ import richmenu from './richmenu.js';
                 },
             };
         }
+    }
+
+     /**
+     * convert line message object into general message object
+     * @param {line.MessageEvent} message general message object
+     * @return {import('./iclient.js').Message}
+     */
+    _convertToGeneral(message) {
+        if (message.type !== 'message') {
+            return null;
+        }
+        if (message.message.type !== 'text') {
+            return null;
+        }
+        return {
+            to: [message.source.userId],
+            type: 'text',
+            text: message.message.text
+        };
     }
 }
