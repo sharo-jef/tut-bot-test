@@ -10,17 +10,17 @@
  * @property {?string} label label
  *
  * @typedef {Object} TextMessage text message
+ * @property {!string[]} to id of the target recipient
  * @property {'text'} type type
  * @property {!string} text text
  *
  * @typedef {Object} MultipleMessage multiple message
+ * @property {!string[]} to id of the target recipient
  * @property {'multiple'} type type
  * @property {?string} altText alternative text
  * @property {!Content[]} contents contents
  *
  * @typedef {TextMessage|MultipleMessage} Message message
- *
- * @typedef {{to:string|string[],messages:Message[]}} MessageObject message with id of the target recipient
  *
  * @typedef {string} EventType event type
  */
@@ -32,7 +32,6 @@ export default class IClient {
     /**
      * send method
      * @virtual
-     * @param {string|string[]} to userids
      * @param {Message[]} messages messages
      */
     send(to, messages) {

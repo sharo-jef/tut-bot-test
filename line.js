@@ -40,16 +40,16 @@ import richmenu from './richmenu.js';
                 throw new Error(`response is ${typeof response}`);
             }
             this.logger.debug(response.data);
-            this.send(response.data.to, response.data.messages);
+            this.send(response.data.messages);
         });
         this.app.post('/push', async (req, res) => {
             res.send(req.body);
             this.logger.debug('req:', req.body);
             /**
-             * @type {import('./iclient.js').MessageObject}
+             * @type {{messages:import('./iclient.js').Message[]}}
              */
             const request = JSON.parse(req.body);
-            this.send(request.to, request.messages);
+            this.send(request.messages);
         });
         this.app.get('/settings', (_, res) => {
             res.sendFile(`${process.env.ROOT}/settings/index.html`);
@@ -72,18 +72,17 @@ import richmenu from './richmenu.js';
 
     /**
      * @override
-     * @param {string|string[]} to array of user id
      * @param {import('./iclient.js').Message[]} messages messages
      */
-    send(to, messages) {
-        /** @type {import('@line/bot-sdk').Message[]} */
+    send(messages) {
+        /** @type {{to:string[],message:import('@line/bot-sdk').Message}[]} */
         const lineMessages = [];
         messages.map(this._convertMessage).forEach(message => {
-            if (message.type === 'text') {
+            if (message.message.type === 'text') {
                 lineMessages.push(message);
-            } else if (message.type === 'template' && message.template.type === 'carousel') {
+            } else if (message.message.type === 'template' && message.message.template.type === 'carousel') {
                 const MAX_COLUMNS = 10;
-                for (let i = 0; i < message.template.columns.length; i += MAX_COLUMNS) {
+                for (let i = 0; i < message.message.template.columns.length; i += MAX_COLUMNS) {
                     const tempMessage = JSON.parse(JSON.stringify(message));
                     tempMessage.template.columns = tempMessage.template.columns.slice(i, i + MAX_COLUMNS);
                     lineMessages.push(tempMessage);
@@ -91,59 +90,71 @@ import richmenu from './richmenu.js';
             }
         });
 
-        const MAX_MESSAGES = 5;
-        for (let i = 0; i < lineMessages.length; i += MAX_MESSAGES) {
-            const tempMessages = lineMessages.slice(i, i + MAX_MESSAGES);
-            if (typeof to === 'string') {
-                this.client.pushMessage(to, tempMessages).catch(error => this.logger.error(error));
-            } else if (Array.isArray(to)) {
-                const MAX_RECIPIENTS = 500;
-                for (let i = 0; i < to.length; i += MAX_RECIPIENTS) {
-                    this.client.multicast(to.slice(i, i + MAX_RECIPIENTS), tempMessages).catch(error => this.logger.error(error));
-                }
-            } else {
-                throw new TypeError('to is not a string or string[]');
+        lineMessages.forEach(message => {
+            const MAX_RECIPIENTS = 500;
+            for (let i = 0; i < message.to.length; i += MAX_RECIPIENTS) {
+
             }
-        }
+        });
+
+        // const MAX_MESSAGES = 5;
+        // for (let i = 0; i < lineMessages.length; i += MAX_MESSAGES) {
+        //     const tempMessages = lineMessages.slice(i, i + MAX_MESSAGES);
+        //     for (let j = 0; j < )
+        //     if (Array.isArray(to)) {
+        //         const MAX_RECIPIENTS = 500;
+        //         for (let i = 0; i < to.length; i += MAX_RECIPIENTS) {
+        //             this.client.multicast(to.slice(i, i + MAX_RECIPIENTS), tempMessages).catch(error => this.logger.error(error));
+        //         }
+        //     } else {
+        //         throw new TypeError('to is not a string or string[]');
+        //     }
+        // }
     }
 
     /**
      * convert general message object into line message object
      * @param {import('./iclient.js').Message} message general message object
-     * @return {line.Message}
+     * @return {{to:string[],message:line.Message}}
      */
     _convertMessage(message) {
         switch (message.type) {
         case 'text':
             return {
-                type: 'text',
-                text: message.text,
+                to: message.to,
+                message: {
+                    type: 'text',
+                    text: message.text,
+                },
             };
         case 'multiple':
             return {
-                type: 'template',
-                altText: message.altText,
-                template: {
-                    type: 'carousel',
-                    columns: message.contents.map(content => /** @type {line.TemplateColumn} */ ({
-                        title: content.title,
-                        text: content.content,
-                        defaultAction: {
-                            type: 'uri',
-                            label: content.label,
-                            uri: content.uri,
-                        },
-                        actions: [
-                            {
+                to: message.to,
+                message: {
+                    type: 'template',
+                    altText: message.altText,
+                    template: {
+                        type: 'carousel',
+                        columns: message.contents.map(content => /** @type {line.TemplateColumn} */ ({
+                            title: content.title,
+                            text: content.content,
+                            defaultAction: {
                                 type: 'uri',
                                 label: content.label,
                                 uri: content.uri,
-                                altUri: {
-                                    desktop: content.uri,
-                                },
                             },
-                        ],
-                    })),
+                            actions: [
+                                {
+                                    type: 'uri',
+                                    label: content.label,
+                                    uri: content.uri,
+                                    altUri: {
+                                        desktop: content.uri,
+                                    },
+                                },
+                            ],
+                        })),
+                    },
                 },
             };
         }
