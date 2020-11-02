@@ -19,8 +19,8 @@ import richmenu from './richmenu.js';
     client = null;
     /**
      * constructor of line client
-     * @param {string} port port
-     * @param {line.MiddlewareConfig&line.ClientConfig} config config
+     * @param {string} port server port
+     * @param {line.MiddlewareConfig&line.ClientConfig} config line config
      */
     constructor(port, config) {
         super();

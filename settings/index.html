@@ -7,19 +7,6 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     </head>
     <body>
-        <!--
-        <header>
-            <ul class="nav nav-tabs">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <h1>設定</h1>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </header>
-        -->
         <main>
             <div class="container">
                 <div class="row">
@@ -41,10 +28,8 @@
                                     <option value="院DS">院DS</option>
                                 </select>
                             </div>
-                        </form>
                         <hr />
                         <h4>プッシュ通知設定</h4>
-                        <form>
                             <div class="form-group">
                                 <label>新着情報</label>
                                 <input type="checkbox" checked />
@@ -53,6 +38,7 @@
                                 <label>イベント</label>
                                 <input type="checkbox" checked />
                                 <hr />
+                                <input type="hidden" value="" id="userId" />
                                 <button class="btn btn-primary">保存</button>
                             </div>
                         </form>
@@ -63,5 +49,18 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+        <script>
+            liff.init({
+                liffId: '1655168464-glkMVdNy'
+            })
+                .then(() => {
+                    if (!liff.isLoggedIn() && !liff.isInClient()) {
+                        alert('error: please login');
+                    } else {
+                        document.querySelector('#userId').value = liff.getDecodedIDToken().sub;
+                    }
+                });
+        </script>
     </body>
 </html>
