@@ -22,7 +22,7 @@
  *
  * @typedef {TextMessage|MultipleMessage} Message message
  *
- * @typedef {string} EventType event type
+ * @typedef {'message'} EventType event type
  */
 
 /**

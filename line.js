@@ -71,7 +71,7 @@ import richmenu from './richmenu.js';
 
     /**
      * method to add event listener
-     * @param {'message'} event event type
+     * @param {import('./iclient.js').EventType} event event type
      * @param {function} listener listener function
      */
     on(event, listener) {
