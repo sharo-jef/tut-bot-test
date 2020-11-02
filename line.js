@@ -93,7 +93,8 @@ import richmenu from './richmenu.js';
         lineMessages.forEach(message => {
             const MAX_RECIPIENTS = 500;
             for (let i = 0; i < message.to.length; i += MAX_RECIPIENTS) {
-
+                this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)
+                    .catch(error => this.logger.fatal(error));
             }
         });
 
