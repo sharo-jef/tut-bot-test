@@ -11,8 +11,8 @@ const client = new Line(process.env.PORT, {
     channelSecret: process.env.SECRET,
 });
 
-client.on('message', async message => {
-    const response = await axios.post(process.env.BACKEND_SERVER_URI_BASE, message)
+client.on('messages', async messages => {
+    const response = await axios.post(process.env.BACKEND_SERVER_URI_BASE, messages)
         .catch(error => logger.error(error));
     if (!response) {
         return;

@@ -9,6 +9,10 @@ import IClient from './iclient.js';
 import richmenu from './richmenu.js';
 
 /**
+ * @typedef {import('./iclient.js').EventType|'messages'} EventType event type
+ */
+
+/**
  * @class Line line client wrapper
  * @implements {IClient}
  */
@@ -36,10 +40,14 @@ import richmenu from './richmenu.js';
         this.app.get('/', (_, res) => res.send('OK'));
         this.app.post('/hook', line.middleware(config), async (req, res) => {
             res.status(200).end();
-            const message = req.body.events.map(this._convertToGeneral);
-            const listeners = this.listeners.filter(listener => listener.type === 'message');
-            for (const listener of listeners) {
-                await listener.listener(message);
+            const messages = req.body.events.map(this._convertToGeneral);
+            for (const listener of this.listeners.filter(listener => listener.type === 'message')) {
+                for (const message of messages) {
+                    await listener.listener(message);
+                }
+            }
+            for (const listener of this.listeners.filter(listener => listener.type === 'messages')) {
+                await listener.listener(messages);
             }
         });
         this.app.post('/push', async (req, res) => {
@@ -71,7 +79,7 @@ import richmenu from './richmenu.js';
 
     /**
      * method to add event listener
-     * @param {import('./iclient.js').EventType} event event type
+     * @param {EventType} event event type
      * @param {function} listener listener function
      */
     on(event, listener) {
@@ -157,20 +165,24 @@ import richmenu from './richmenu.js';
 
      /**
      * convert line message object into general message object
-     * @param {line.MessageEvent} message general message object
+     * @param {line.WebhookEvent} message general message object
      * @return {import('./iclient.js').Message}
      */
     _convertToGeneral(message) {
-        if (message.type !== 'message') {
+        if (message.type === 'message') {
+            if (message.message.type === 'text') {
+                return {
+                    to: [message.source.userId],
+                    type: 'text',
+                    text: message.message.text
+                };
+            }
             return null;
+        } else if (message.type === 'follow') {
+            return {
+                to: [message.source.userId],
+                type: 'follow'
+            }
         }
-        if (message.message.type !== 'text') {
-            return null;
-        }
-        return {
-            to: [message.source.userId],
-            type: 'text',
-            text: message.message.text
-        };
     }
 }

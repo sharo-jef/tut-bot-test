@@ -20,7 +20,11 @@
  * @property {!string} altText alternative text
  * @property {!Content[]} contents contents
  *
- * @typedef {TextMessage|MultipleMessage} Message message
+ * @typedef {Object} FollowMessage follow message
+ * @property {!string[]} to id of the target recipient
+ * @property {'follow'} type type
+ *
+ * @typedef {TextMessage|MultipleMessage|FollowMessage} Message message
  *
  * @typedef {'message'} EventType event type
  */
