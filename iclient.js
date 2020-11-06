@@ -38,7 +38,7 @@ export default class IClient {
      * @virtual
      * @param {Message[]} messages messages
      */
-    async send(to, messages) {
+    async send(messages) {
 
     }
 

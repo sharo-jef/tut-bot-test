@@ -182,7 +182,7 @@ import richmenu from './richmenu.js';
             return {
                 to: [message.source.userId],
                 type: 'follow'
-            }
+            };
         }
     }
 }
