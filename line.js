@@ -13,7 +13,7 @@ import richmenu from './richmenu.js';
  */
 
 /**
- * @class Line line client wrapper
+ * @class line client wrapper
  * @implements {IClient}
  */
 export default class Line extends IClient {
