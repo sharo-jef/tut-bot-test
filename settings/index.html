@@ -58,6 +58,7 @@
                     if (!liff.isLoggedIn() && !liff.isInClient()) {
                         alert('error: please login');
                     } else {
+                        alert(location.search);
                         document.querySelector('#userId').value = liff.getDecodedIDToken().sub;
                     }
                 });
