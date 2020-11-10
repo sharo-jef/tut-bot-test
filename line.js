@@ -16,7 +16,7 @@ import richmenu from './richmenu.js';
  * @class Line line client wrapper
  * @implements {IClient}
  */
- export default class Line extends IClient {
+export default class Line extends IClient {
     /**
      * @type {line.Client}
      */
@@ -77,6 +77,24 @@ import richmenu from './richmenu.js';
                     .catch(error => this.logger.error(error));
             })
             .catch(error => this.logger.error(error));
+        this.client.multicast(['Uc10f34878ecea7828bf09317816b662e'], [
+            {
+                type: 'text',
+                text: 'hoge',
+                quickReply: {
+                    items: [
+                        {
+                            type: 'action',
+                            action: {
+                                type: 'message',
+                                label: 'foo',
+                                text: 'fooooo',
+                            }
+                        }
+                    ]
+                },
+            }
+        ]);
     }
 
     /**
