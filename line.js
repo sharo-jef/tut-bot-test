@@ -28,7 +28,7 @@ import richmenu from './richmenu.js';
      */
     constructor(port, config) {
         super();
-        /** @type {{type:string,listener:function}[]} */
+        /** @type {{type:string,listener:(...args:any)=>Promise<any>}[]} */
         this.listeners = [];
         this.client = new line.Client(config);
         this.logger = log4js.getLogger('Line');
@@ -43,11 +43,13 @@ import richmenu from './richmenu.js';
             const messages = req.body.events.map(this._convertToGeneral);
             for (const listener of this.listeners.filter(listener => listener.type === 'message')) {
                 for (const message of messages) {
-                    await listener.listener(message);
+                    await listener.listener(message)
+                        .catch(error => this.logger.error(error));
                 }
             }
             for (const listener of this.listeners.filter(listener => listener.type === 'messages')) {
-                await listener.listener(messages);
+                await listener.listener(messages)
+                    .catch(error => this.logger.error(error));
             }
         });
         this.app.post('/push', async (req, res) => {

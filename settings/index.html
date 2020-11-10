@@ -64,9 +64,7 @@
                         document.querySelector('#userId').value = liff.getDecodedIDToken().sub;
                         fetch('https://tut-php-api.herokuapp.com', {
                             method: 'POST',
-                            mode: 'cors',
                             cache: 'no-cache',
-                            credentials: 'same-origin',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
