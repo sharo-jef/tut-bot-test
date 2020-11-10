@@ -17,5 +17,6 @@ client.on('messages', async messages => {
     if (!response) {
         return;
     }
-    client.send(response.data.messages);
+    client.send(response.data.messages)
+        .catch(error => logger.error(error));
 });

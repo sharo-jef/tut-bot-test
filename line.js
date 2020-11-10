@@ -82,7 +82,7 @@ import richmenu from './richmenu.js';
     /**
      * method to add event listener
      * @param {EventType} event event type
-     * @param {function} listener listener function
+     * @param {(...args:any)=>Promise<any>} listener listener function
      */
     on(event, listener) {
         this.listeners.push({type: event, listener});
