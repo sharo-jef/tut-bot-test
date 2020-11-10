@@ -13,6 +13,7 @@
  * @property {!string[]} to id of the target recipient
  * @property {'text'} type type
  * @property {!string} text text
+ * @property {?QuickReply} quickReply quick reply
  *
  * @typedef {Object} MultipleMessage multiple message
  * @property {!string[]} to id of the target recipient
@@ -27,6 +28,9 @@
  * @typedef {TextMessage|MultipleMessage|FollowMessage} Message message
  *
  * @typedef {'message'} EventType event type
+ *
+ * @typedef {Object} QuickReply
+ * @property {!string[]} texts reply texts
  */
 
 /**

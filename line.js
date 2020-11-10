@@ -77,24 +77,6 @@ export default class Line extends IClient {
                     .catch(error => this.logger.error(error));
             })
             .catch(error => this.logger.error(error));
-        this.client.multicast(['Uc10f34878ecea7828bf09317816b662e'], [
-            {
-                type: 'text',
-                text: 'hoge',
-                quickReply: {
-                    items: [
-                        {
-                            type: 'action',
-                            action: {
-                                type: 'message',
-                                label: 'foo',
-                                text: 'fooooo',
-                            }
-                        }
-                    ]
-                },
-            }
-        ]);
     }
 
     /**
@@ -141,15 +123,34 @@ export default class Line extends IClient {
      * @return {{to:string[],message:line.Message}}
      */
     _convertToLine(message) {
+        /** @type {{to:string[],message:line.Message}} */
+        let tmp;
         switch (message.type) {
         case 'text':
-            return {
+            tmp = {
                 to: message.to,
                 message: {
                     type: 'text',
-                    text: message.text,
+                    text: message.text
                 },
             };
+            if (
+                message.quickReply
+                && message.quickReply.texts
+                && message.quickReply.texts.length
+            ) {
+                tmp.message.quickReply = {
+                    items: message.quickReply.texts.map(text => ({
+                            type: 'action',
+                            action: {
+                                type: 'message',
+                                label: text,
+                                text: text,
+                            }
+                        }))
+                };
+            }
+            return tmp;
         case 'multiple':
             return {
                 to: message.to,
