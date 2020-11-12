@@ -12,7 +12,7 @@ const client = new Line(process.env.PORT, {
 });
 
 client.on('messages', async messages => {
-    const response = await axios.post(process.env.BACKEND_SERVER_URI_BASE, messages)
+    const response = await axios.post(`${process.env.BACKEND_SERVER_URI_BASE}/messages/reply`, messages)
         .catch(error => logger.error(error));
     if (!response) {
         return;
