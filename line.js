@@ -53,12 +53,12 @@ export default class Line extends IClient {
             }
         });
         this.app.post('/push', async (req, res) => {
-            res.send(req.body);
+            res.status(200).end();
             /**
-             * @type {{messages:import('./iclient.js').Message[]}}
+             * @type {import('./iclient.js').Message[]}
              */
             const request = JSON.parse(req.body);
-            this.send(request.messages);
+            this.send(request);
         });
         this.app.get('/settings', (_, res) => {
             res.sendFile(`${process.env.ROOT}/settings/index.html`);
